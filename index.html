@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian CAT Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-full text-slate-800 antialiased selection:bg-blue-500 selection:text-white flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="https://cdn.phototourl.com/member/2026-09-28-523950e4-4b19-4b31-96a6-7fbd7721c757.png" 
+                     alt="Logo CAT Online" 
+                     class="h-10 w-auto object-contain max-w-[160px]"
+                     onerror="this.onerror=null; this.src='https://placehold.co/120x40/2563eb/ffffff?text=CAT+Online';">
+                <div>
+                    <h1 class="text-base font-bold text-slate-900 leading-tight">PORTAL CAT Online</h1>
+                    <p class="text-xs text-slate-500 hidden sm:block">Sistem Ujian Computer Assisted Test</p>
+                    <p class="text-xs text-slate-500 hidden sm:block font-medium text-blue-700">SD NEGERI 1 BANDUNG</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm">
+                    <span class="text-[11px] font-medium text-slate-500">Created by</span>
+                    <img src="https://cdn.phototourl.com/member/2026-09-28-c7d8d789-5ce9-4f65-9b84-7d69a0771dd5.png" 
+                         alt="Created By Logo" 
+                         class="h-7 w-auto object-contain"
+                         onerror="this.onerror=null; this.src='https://placehold.co/80x28/2563eb/ffffff?text=Creator';">
+                </div>
+
+                <!-- Header Exam Info (Visible during exam) -->
+                <div id="header-exam-info" class="hidden flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-xs">
+                        <i class="fa-solid fa-user-check text-blue-600"></i>
+                        <span id="nav-user-name" class="font-semibold text-slate-700">Peserta</span>
+                    </div>
+
+                    <div class="flex items-center gap-2 bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl text-rose-700 font-mono font-bold text-sm shadow-sm">
+                        <i class="fa-regular fa-clock animate-pulse text-rose-600"></i>
+                        <span id="timer">60:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col">
+
+        <!-- 1. LOGIN SCREEN -->
+        <div id="login-screen" class="my-auto max-w-md w-full mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white text-center">
+                    <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-3 backdrop-blur-md p-2">
+                        <img src="https://cdn.phototourl.com/member/2026-09-28-523950e4-4b19-4b31-96a6-7fbd7721c757.png" 
+                             alt="Logo Konfirmasi Identitas" 
+                             class="w-full h-full object-contain filter drop-shadow"
+                             onerror="this.onerror=null; this.src='https://placehold.co/64x64/2563eb/ffffff?text=Logo';">
+                    </div>
+                    <h2 class="text-xl font-bold">Konfirmasi Identitas</h2>
+                    <p class="text-xs text-blue-100 mt-1">Masukkan Nama Lengkap Anda untuk memulai</p>
+                </div>
+
+                <form id="login-form" onsubmit="handleStartExam(event)" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="user-name" required placeholder="Contoh: Ahmad Subagja" 
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50 rounded-xl p-3 border border-amber-200 flex gap-2.5 text-xs text-amber-800">
+                        <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-sm shrink-0"></i>
+                        <p class="leading-relaxed">Ujian berlangsung selama <strong>60 menit</strong> dengan <strong id="total-questions-info">50 soal</strong> variasi. Pastikan koneksi internet Anda lancar.</p>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-xl text-sm shadow-md shadow-blue-500/20 transition flex items-center justify-center gap-2">
+                        <span>Mulai Ujian</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. EXAM INTERFACE SCREEN -->
+        <div id="exam-app" class="hidden space-y-6">
+            <!-- Progress Bar -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Progres Ujian</span>
+                    <div class="w-full sm:w-48 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                        <div id="exam-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 text-xs font-semibold text-slate-600 self-end sm:self-auto">
+                    <span>Terjawab: <strong id="answered-badge" class="text-blue-600">0</strong>/<span id="total-badge">50</span></span>
+                    <span class="text-slate-300">|</span>
+                    <span>Ragu: <strong id="marked-badge" class="text-amber-600">0</strong></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Main Question Area -->
+                <div class="lg:col-span-3 space-y-4">
+                    <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 relative min-h-[380px] flex flex-col justify-between">
+                        
+                        <!-- Question Header & Type Badge -->
+                        <div>
+                            <div class="flex items-center justify-between border-b pb-4 mb-5">
+                                <div class="flex items-center gap-2">
+                                    <span id="question-number-badge" class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-lg">Soal 1</span>
+                                    <span id="question-type-badge" class="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-lg border border-slate-200">Pilihan Ganda</span>
+                                </div>
+                                <button onclick="toggleMarkCurrentQuestion()" id="flag-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-slate-50 border-slate-300 text-slate-600 hover:bg-slate-100">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                    <span>Ragu-Ragu</span>
+                                </button>
+                            </div>
+
+                            <!-- Question Text -->
+                            <div id="question-container" class="text-slate-800 font-medium text-base leading-relaxed mb-6 whitespace-pre-line">
+                                <!-- Dynamic Question Text -->
+                            </div>
+
+                            <!-- Answer Options Container -->
+                            <div id="options-container" class="space-y-3">
+                                <!-- Dynamic Options -->
+                            </div>
+                        </div>
+
+                        <!-- Footer Navigation Buttons -->
+                        <div class="flex items-center justify-between pt-6 border-t mt-8 gap-2">
+                            <button id="prev-btn" onclick="navigateQuestion(-1)" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition flex items-center gap-2">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                <span>Sebelumnya</span>
+                            </button>
+
+                            <button id="next-btn" onclick="navigateQuestion(1)" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition flex items-center gap-2">
+                                <span>Berikutnya</span>
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Question Palette Grid -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sticky top-20">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center justify-between">
+                            <span>Navigasi Soal</span>
+                            <i class="fa-solid fa-grip text-slate-400"></i>
+                        </h3>
+
+                        <!-- Question Grid Matrix -->
+                        <div id="question-grid" class="grid grid-cols-5 gap-2 mb-6 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+                            <!-- Dynamic Question Buttons -->
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="border-t pt-4 space-y-2 text-[11px] text-slate-600">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded bg-blue-600 inline-block"></span>
+                                <span>Sudah Dijawab</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded bg-amber-500 inline-block"></span>
+                                <span>Ragu-Ragu</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded bg-slate-100 border border-slate-300 inline-block"></span>
+                                <span>Belum Dijawab</span>
+                            </div>
+                        </div>
+
+                        <button onclick="openSubmitModal()" class="w-full mt-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-500/20 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Selesaikan Ujian</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. RESULT & REVIEW SCREEN -->
+        <div id="result-screen" class="hidden space-y-6 max-w-4xl mx-auto w-full">
+            <!-- Result Summary Card -->
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-500"></div>
+                
+                <!-- Status Server Webhook Batch -->
+                <div id="submit-status" class="mb-4 hidden p-3 rounded-xl text-xs font-medium transition-all">
+                    <!-- Dynamic server status badge -->
+                </div>
+
+                <!-- Admin URL Config Trigger Button -->
+                <div class="mb-4 flex justify-end">
+                    <button onclick="openAdminPasswordModal()" class="text-xs text-slate-500 hover:text-blue-600 font-medium inline-flex items-center gap-1.5 transition px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200">
+                        <i class="fa-solid fa-lock text-amber-500"></i> Ganti URL (Admin)
+                    </button>
+                </div>
+
+                <!-- Webhook URL Config Input -->
+                <div id="webhook-config-panel" class="hidden mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200 text-left space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                            <i class="fa-solid fa-link text-blue-600"></i> URL Google Apps Script Web App
+                        </label>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="custom-script-url" 
+                            class="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 outline-none font-mono"
+                            placeholder="https://script.google.com/macros/s/.../exec">
+                        <button onclick="resendResultData()" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shrink-0 transition flex items-center gap-1">
+                            <i class="fa-solid fa-paper-plane"></i> Kirim Ulang
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-500">
+                        <p>Pastikan URL Web App Anda diset ke <strong>"Anyone" (Siapa Saja)</strong> agar data Nama & Nilai bisa masuk tanpa kendala.</p>
+                        <button onclick="closeAdminConfigPanel()" class="text-xs text-rose-600 hover:underline shrink-0 ml-2 font-medium">Sembunyikan</button>
+                    </div>
+                </div>
+
+                <!-- Personalized Greeting & Motivation -->
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl shadow-sm">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Ujian Selesai!</h2>
+                    <p class="text-xs text-slate-500 mt-1">Hasil ujian Anda telah dikalkulasi secara otomatis.</p>
+                </div>
+
+                <!-- Score Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <span class="text-xs font-medium text-slate-500 block">Skor Akhir</span>
+                        <span id="res-score" class="text-3xl font-extrabold text-blue-600 mt-1 block">0</span>
+                    </div>
+                    <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                        <span class="text-xs font-medium text-emerald-700 block">Benar</span>
+                        <span id="res-correct" class="text-3xl font-extrabold text-emerald-600 mt-1 block">0</span>
+                    </div>
+                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-200">
+                        <span class="text-xs font-medium text-rose-700 block">Salah</span>
+                        <span id="res-wrong" class="text-3xl font-extrabold text-rose-600 mt-1 block">0</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <span class="text-xs font-medium text-slate-500 block">Waktu Pengerjaan</span>
+                        <span id="res-time" class="text-xl font-bold text-slate-700 mt-2 block font-mono">00:00</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <button onclick="toggleDiscussionSection()" class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Lihat Pembahasan Soal</span>
+                    </button>
+                    <button onclick="restartExam()" class="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Ulangi Ujian</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Discussion Section (Initially Hidden) -->
+            <div id="discussion-section" class="hidden space-y-4">
+                <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-blue-600"></i> Pembahasan Soal
+                </h3>
+                <div id="review-container" class="space-y-4">
+                    <!-- Dynamic Review Cards -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SUBMIT CONFIRMATION MODAL -->
+    <div id="submit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center transform transition-all scale-100">
+            <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800">Selesaikan Ujian?</h3>
+            <p id="modal-summary-text" class="text-xs text-slate-500 mt-2 leading-relaxed">
+                Anda telah menjawab <span id="modal-answered-count" class="font-bold text-slate-700">0</span> dari <span id="modal-total-count">50</span> soal. Pastikan semua jawaban sudah diperiksa kembali.
+            </p>
+
+            <div class="mt-6 flex items-center space-x-3">
+                <button onclick="closeSubmitModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm transition">
+                    Batal
+                </button>
+                <button onclick="submitExam()" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-sm shadow-md shadow-emerald-500/20 transition">
+                    Ya, Kumpulkan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TIMEOUT ALERT MODAL -->
+    <div id="timeout-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center">
+            <div class="w-14 h-14 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-hourglass-end animate-bounce"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800">Waktu Telah Habis!</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                Waktu pengerjaan ujian Anda telah berakhir. Sistem akan mengumpulkan jawaban Anda secara otomatis.
+            </p>
+            <button onclick="acknowledgeTimeout()" class="mt-6 w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm shadow-md transition">
+                Lihat Hasil Ujian
+            </button>
+        </div>
+    </div>
+
+    <!-- ADMIN PASSWORD MODAL -->
+    <div id="admin-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center">
+            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800">Akses Pengaturan Admin</h3>
+            <p class="text-xs text-slate-500 mt-1 mb-4">Masukkan sandi admin untuk mengubah URL Google Apps Script</p>
+
+            <form onsubmit="handleAdminPasswordSubmit(event)" class="space-y-3">
+                <div>
+                    <input type="password" id="admin-password-input" placeholder="Masukkan Sandi Admin" required
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-center focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    <p id="admin-password-error" class="hidden text-rose-600 text-[11px] mt-1.5 font-medium flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-circle-exclamation"></i> Sandi salah! Silakan coba lagi.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                    <button type="button" onclick="closeAdminPasswordModal()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition">
+                        Batal
+                    </button>
+                    <button type="submit" class="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-xs shadow-md shadow-blue-500/20 transition">
+                        Konfirmasi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Database Soal Terkelompok berdasarkan Tipe Soal
+        const questionBank = {
+            // 1. Kelompok Soal Pilihan Ganda (1-20)
+            pilihanGanda: [
+  [
+  {
+    "id": 1,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Ahmad adalah seorang siswa SD yang tinggal di daerah perkotaan. Di awal bulan, ia memiliki beberapa daftar kebutuhan:\n1) Membeli buku tulis dan pensil untuk sekolah\n2) Membeli mainan edisi terbatas keluaran terbaru\n3) Membeli makanan dan minuman untuk makan siang\n4) Membeli kemeja batik untuk dipakai saat acara keluarga\n\nJika uang saku Ahmad terbatas, urutan prioritas pemenuhan kebutuhan yang paling tepat dan bijak dari C3 (Mengaplikasikan) adalah...",
+    "options": [
+      "1 - 3 - 4 - 2",
+      "3 - 1 - 4 - 2",
+      "2 - 4 - 1 - 3",
+      "4 - 3 - 2 - 1"
+    ],
+    "correctAnswer": 1,
+    "discussion": "Makanan dan minuman (3) adalah kebutuhan primer untuk bertahan hidup. Buku dan alat tulis (1) serta pakaian batik (4) merupakan kebutuhan pendukung belajar dan sosial (sekunder). Mainan edisi terbatas (2) adalah kebutuhan tersier/keinginan mewah yang pemenuhannya dapat ditunda. Urutan prioritas yang bijak adalah primer disusul sekunder dan tersier (3 - 1 - 4 - 2)."
+  },
+  {
+    "id": 2,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Perhatikan ilustrasi berikut!\n\"Pak Budi rutin memanen cabai dari kebun di belakang rumahnya untuk dikonsumsi keluarga sehari-hari. Sementara itu, Pak Andi membeli cabai di pasar modern untuk persediaan dapur rumahnya.\"\n\nBerdasarkan materi pemenuhan kebutuhan, analisis perbandingan yang benar mengenai cara kedua orang tersebut memperoleh barang adalah...",
+    "options": [
+      "Pak Budi berperan sebagai distributor, sedangkan Pak Andi berperan sebagai produsen.",
+      "Pak Budi memperoleh barang dari hasil sendiri, sedangkan Pak Andi memperoleh barang dari pasar modern.",
+      "Pak Budi memenuhi kebutuhan sekunder, sedangkan Pak Andi memenuhi kebutuhan tersier.",
+      "Pak Budi dan Pak Andi sama-sama memanfaatkan jasa transportasi untuk memenuhi kebutuhan."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Pak Budi memanen tanaman cabai milik sendiri di belakang rumah, yang artinya ia memperoleh barang dari hasil sendiri. Sedangkan Pak Andi membeli cabai di toko/pasar modern dengan sistem swalayan."
+  },
+  {
+    "id": 3,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Seorang penjahit membeli kain, benang, dan kancing dari pedagang bahan tekstil, lalu mengolahnya menjadi seragam sekolah yang siap dipakai oleh para siswa.\n\nRantai alur kegiatan ekonomi dan peran penjahit yang paling tepat dalam ilustrasi di atas adalah...",
+    "options": [
+      "Penjahit berperan sebagai distributor karena menyalurkan barang dari pabrik tekstil ke siswa.",
+      "Penjahit melakukan kegiatan produksi jasa mengantar barang dari pedagang ke konsumen.",
+      "Penjahit berperan sebagai produsen yang mengubah bahan baku menjadi barang jadi berupa pakaian.",
+      "Penjahit bertindak sebagai konsumen akhir dari seragam sekolah tersebut."
+    ],
+    "correctAnswer": 2,
+    "discussion": "Penjahit merupakan produsen karena melakukan kegiatan produksi dengan mengubah bahan baku (kain dan benang) menjadi barang bernilai guna lebih tinggi (seragam sekolah) untuk digunakan oleh konsumen."
+  },
+  {
+    "id": 4,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Pak Joko memiliki usaha pengolahan keripik pisang di pedesaan. Namun, produk keripiknya sulit dijual ke kota-kota besar karena jalan desa rusak parah dan tidak ada angkutan barang yang mau melintas.\n\nFaktor pendukung kegiatan ekonomi apakah yang bermasalah pada kasus Pak Joko di atas, serta apa dampaknya?",
+    "options": [
+      "Teknologi; menyebabkan proses pembuatan keripik menjadi lambat.",
+      "Infrastruktur dan Transportasi; menyebabkan distribusi barang terhambat dan jangkauan pasar terbatas.",
+      "Sumber Daya Manusia; menyebabkan kualitas keripik pisang menurun.",
+      "Pasar; menyebabkan harga pisang lokal menjadi sangat mahal."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Jalan rusak dan ketiadaan angkutan berhubungan langsung dengan infrastruktur serta moda transportasi. Kerusakan/keterbatasan ini menghambat proses distribusi barang dari tempat produksi ke konsumen."
+  },
+  {
+    "id": 5,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Perhatikan dua jenis pasar berikut!\nPasar X: Memiliki harga pas yang tertera pada label, tempat ber-AC, menggunakan sistem pembayaran elektronik atau kasir, dan pembeli mengambil barang sendiri secara swalayan.\nPasar Y: Penjual dan pembeli berinteraksi langsung, harga barang dapat ditawar, dan suasananya ramai serta sarat interaksi sosial antarwarga.\n\nPernyataan analisis yang benar mengenai kedua pasar tersebut adalah...",
+    "options": [
+      "Pasar X adalah pasar tradisional, sedangkan Pasar Y adalah pasar modern.",
+      "Pasar X tidak memiliki keunggulan dibandingkan Pasar Y.",
+      "Pasar X adalah pasar modern (seperti supermarket), sedangkan Pasar Y adalah pasar tradisional.",
+      "Pembeli di Pasar Y tidak bisa membeli kebutuhan bahan pangan segar."
+    ],
+    "correctAnswer": 2,
+    "discussion": "Pasar X bercirikan pasar modern (sistem swalayan, harga pasti/label, fasilitas pendingin udara, pembayaran kasir/elektronik). Pasar Y bercirikan pasar tradisional (tawar-menawar, interaksi langsung, suasana akrab/sosialisasi)."
+  },
+  {
+    "id": 6,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Di sebuah daerah dataran tinggi/pegunungan yang sejuk dan tanahnya subur, mayoritas penduduknya bekerja sebagai petani sayur dan pengelola wisata kebun teh. Mengapa kegiatan ekonomi masyarakat di daerah tersebut dominan di sektor tersebut?",
+    "options": [
+      "Karena daerah pegunungan memiliki laut yang luas sehingga cocok untuk usaha perikanan.",
+      "Karena kondisi alam dan cuaca sangat mendukung tumbuhnya tanaman holtikultura serta daya tarik wisata alam.",
+      "Karena pemerintah melarang pendirian pasar modern dan kawasan industri di pegunungan.",
+      "Karena masyarakat pegunungan tidak membutuhkan barang-barang hasil produksi industri."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Masyarakat menyesuaikan kegiatan ekonominya dengan potensi geografis setempat. Daerah pegunungan memiliki udara sejuk dan tanah subur yang mendukung pertanian/perkebunan serta pemandangan alam yang berpotensi menjadi objek pariwisata."
+  },
+  {
+    "id": 7,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Ibu Siti membeli bahan makanan segar seperti sayuran, ikan, dan bumbu dapur dari pedagang eceran di dekat rumahnya, kemudian memasaknya untuk dinikmati oleh seluruh anggota keluarga.\n\nDalam kegiatan tersebut, peran Ibu Siti dan keluarganya dapat dikategorikan sebagai...",
+    "options": [
+      "Produsen bahan baku",
+      "Distributor eceran",
+      "Konsumen akhir",
+      "Pelaku usaha ekspor"
+    ],
+    "correctAnswer": 2,
+    "discussion": "Ibu Siti dan keluarganya menggunakan dan menghabiskan nilai guna barang (bahan makanan) untuk memenuhi kebutuhan hidup sehari-hari, sehingga mereka bertindak sebagai konsumen."
+  },
+  {
+    "id": 8,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Sebuah kota pesisir memiliki potensi hasil laut yang melimpah. Warga setempat tidak hanya menjual ikan segar, tetapi juga mengolahnya menjadi kerupuk ikan, terasi, dan ikan asin yang dikemas rapi untuk dikirim ke berbagai wilayah perkotaan.\n\nKeuntungan dari diversifikasi kegiatan ekonomi pengolahan hasil laut tersebut bagi masyarakat pesisir adalah...",
+    "options": [
+      "Menghilangkan peran distributor dalam penyaluran barang.",
+      "Meningkatkan nilai jual produk hasil laut dan membuka lapangan kerja baru.",
+      "Mengurangi jumlah wisatawan yang berkunjung ke daerah pantai.",
+      "Membuat harga ikan di pasar tradisional menjadi turun drastis."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Pengolahan hasil laut (seperti membuat kerupuk ikan dan ikan asin) meningkatkan nilai tambah/jual produk, menciptakan variasi produk yang tahan lama untuk didistribusikan, serta membuka peluang kerja dan menambah penghasilan warga."
+  },
+  {
+    "id": 9,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Di kota-kota besar seperti Jakarta dan Surabaya, sebagian besar kegiatan ekonomi masyarakatnya berpusat pada sektor perdagangan, industri pabrik, dan jasa (seperti dokter, guru, sopir, pegawai kantor).\n\nFaktor utama yang menyebabkan dominahnya sektor non-pertanian di daerah perkotaan adalah...",
+    "options": [
+      "Perkotaan memiliki tanah pertanian yang jauh lebih subur daripada daerah pegunungan.",
+      "Kepadatan penduduk yang tinggi, sarana infrastruktur yang maju, serta terbatasnya lahan pertanian.",
+      "Seluruh masyarakat kota dilarang untuk berbelanja kebutuhan pokok di pasar tradisional.",
+      "Masyarakat perkotaan tidak memerlukan hasil panen dari daerah pedesaan."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Daerah perkotaan dicirikan oleh jumlah penduduk yang padat, keterbatasan lahan terbuka untuk pertanian, serta didukung infrastruktur dan teknologi modern sehingga berkembang pesat di sektor perdagangan, industri, dan jasa."
+  },
+  {
+    "id": 10,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Perhatikan daftar kegiatan berikut:\n1) Sopir truk mengangkut beras dari penggilingan desa ke pasar kota\n2) Dokter memeriksa dan mengobati pasien di rumah sakit\n3) Kurir mengantarkan paket pesanan barang belanja online ke rumah pembeli\n4) Pengrajin membuat tas anyaman bambu untuk dijual\n\nKegiatan yang termasuk dalam kategori kegiatan DISTRIBUSI ditunjukkan oleh nomor...",
+    "options": [
+      "1 dan 2",
+      "1 dan 3",
+      "2 dan 4",
+      "3 dan 4"
+    ],
+    "correctAnswer": 1,
+    "discussion": "Kegiatan nomor 1 (sopir truk pengangkut beras) dan nomor 3 (kurir pengantar barang) adalah kegiatan menyalurkan barang dari produsen/penjual ke konsumen (distribusi). Nomor 2 dan 4 merupakan kegiatan produksi (jasa kesehatan dan pembuatan barang)."
+  },
+  {
+    "id": 11,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Saat ini, masyarakat dapat membeli berbagai barang kebutuhan rumah tangga cukup menggunakan aplikasi belanja di ponsel genggam tanpa perlu keluar rumah. Barang yang dipesan akan diantar langsung oleh jasa kurir sampai ke depan rumah.\n\nPeran teknologi dalam kegiatan ekonomi berdasarkan kasus di atas adalah...",
+    "options": [
+      "Menghilangkan kebutuhan manusia akan barang dan jasa.",
+      "Mempermudah proses transaksi dan mempercepat distribusi barang hingga ke tangan konsumen.",
+      "Menghentikan kegiatan produksi yang dilakukan oleh pabrik-pabrik.",
+      "Membuat harga barang menjadi tidak terjangkau bagi masyarakat."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Penggunaan aplikasi belanja online dan sistem kurir merupakan contoh pemanfaatan teknologi yang meningkatkan efisiensi transaksi (konsumsi) dan mempercepat jangkauan pengiriman barang (distribusi)."
+  },
+  {
+    "id": 12,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Perhatikan fenomena berikut!\n\"Sebuah pabrik tekstil di daerah X memanfaatkan air sungai secara berlebihan tanpa mengolah limbahnya. Akibatnya, air sungai tercemar, ikan-ikan mati, dan warga sekitar kesulitan mendapatkan air bersih untuk kebutuhan sehari-hari.\"\n\nBerdasarkan prinsip penggunaan Sumber Daya Alam (SDA) yang bijak, langkah evaluasi paling tepat yang harus dilakukan pabrik tersebut adalah...",
+    "options": [
+      "Menutup pabrik secara permanen agar tidak ada lagi kegiatan ekonomi.",
+      "Mengolah limbah industri sebelum dibuang ke sungai serta menghemat penggunaan air.",
+      "Memindahkan limbah ke tanah warga sekitar agar sungai tetap jernih.",
+      "Mengganti seluruh tenaga kerja manusia dengan mesin yang lebih canggih."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Penggunaan SDA harus memperhatikan kelestarian lingkungan. Evaluasi yang tepat adalah dengan mengelola limbah terlebih dahulu sebelum dibuang agar tidak merusak ekosistem dan mengganggu pasokan air bersih bagi masyarakat."
+  },
+  {
+    "id": 13,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Doni mendapatkan uang saku sebesar Rp20.000,00 setiap hari. Sebagai seorang pelajar yang bijak dalam kegiatan ekonomi, manakah tindakan Doni yang mencerminkan pemanfaatan uang secara tepat?",
+    "options": [
+      "Menggunakan seluruh uangnya untuk membeli jajanan dan mainan agar merasa puas.",
+      "Menyisihkan sebagian uang untuk ditabung, membeli kebutuhan sekolah secukupnya, dan tidak boros.",
+      "Meminjamkan seluruh uangnya kepada teman dengan meminta ganti rugi bunga yang tinggi.",
+      "Menyimpan seluruh uang tanpa pernah membeli makanan saat merasa lapar di sekolah."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Sikap bijak konsumen (termasuk pelajar) adalah mengatur pengeluaran secara seimbang: memenuhi kebutuhan prioritas (makanan/alat tulis secukupnya) dan menyisihkan sebagian uang untuk tabungan masa depan."
+  },
+  {
+    "id": 14,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Mengapa penggunaan bahan bakar fosil seperti minyak bumi dan batu bara dalam kegiatan industri dan transportasi harus dihemat secara ketat?",
+    "options": [
+      "Karena minyak bumi dan batu bara merupakan sumber daya alam yang dapat diperbarui dalam waktu cepat.",
+      "Karena jumlahnya di alam terbatas dan tidak dapat diperbarui, sehingga jika habis dapat melumpuhkan kegiatan ekonomi.",
+      "Karena minyak bumi dan batu bara tidak memiliki fungsi penting dalam menggerakkan mesin pabrik.",
+      "Karena harga bahan bakar fosil selalu disubsidi penuh oleh negara tanpa batas."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Batu bara dan minyak bumi adalah sumber daya alam yang tidak dapat diperbarui. Penggunaan yang berlebihan tanpa penghematan dapat menyebabkan kelangkaan dan mengganggu kelangsungan aktivitas ekonomi serta transportasi."
+  },
+  {
+    "id": 15,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Sebagai seorang siswa sekolah dasar, bentuk tindakan nyata dan paling efektif yang dapat kamu lakukan untuk mendukung pertumbuhan perekonomian daerah setempat adalah...",
+    "options": [
+      "Membeli barang-barang impor dari luar negeri untuk dipamerkan di sekolah.",
+      "Membeli produk, makanan, dan kerajinan buatan UMKM/pedagang lokal di sekitar lingkungan tempat tinggal.",
+      "Menuntut orang tua untuk selalu membelikan barang-barang mewah dari pasar modern.",
+      "Menjual seluruh barang pribadi milik orang tua tanpa izin."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Salah satu peran sederhana warga/pelajar dalam mendukung ekonomi daerah adalah dengan mencintai, membeli, dan menggunakan produk lokal atau produk UMKM sekitar agar usaha warga lokal berkembang."
+  },
+  {
+    "id": 16,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Pemerintah membangun sarana jalan tol, dermaga pelabuhan, dan jaringan listrik yang memadai di daerah tertinggal. Dampak langsung dari pembangunan infrastruktur tersebut terhadap kegiatan ekonomi lokal adalah...",
+    "options": [
+      "Membuat masyarakat berhenti bekerja sebagai petani dan nelayan.",
+      "Mempercepat arus distribusi barang, menurunkan biaya logistik, dan meningkatkan daya saing ekonomi daerah.",
+      "Membatasi pedagang luar daerah untuk masuk ke pasar tradisional.",
+      "Menurunkan pendapatan pajak daerah dari para pelaku usaha."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Infrastruktur yang baik (jalan, pelabuhan, listrik) mempermudah mobilitas barang dan jasa, mempercepat proses distribusi, serta menekan biaya transportasi sehingga pertumbuhan ekonomi daerah dapat melaju pesat."
+  },
+  {
+    "id": 17,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Perhatikan teks uraian berikut!\n\"Di desa tempat tinggal Rina, mayoritas warga adalah petani padi. Namun, saat musim panen raya, harga beras seringkali melonjak turun karena pasokan beras dari desa lain juga melimpah di pasar.\"\n\nSolusi atau gagasan inovatif yang paling tepat (C5 - Evaluasi/Solusi) untuk membantu para petani di desa Rina agar pendapatan mereka tetap stabil adalah...",
+    "options": [
+      "Menebang seluruh tanaman padi dan menggantinya dengan bangunan pabrik modern.",
+      "Mengolah sebagian hasil panen padi menjadi produk olahan bernilai tambah (seperti tepung beras atau makanan olahan) dan mengemasnya secara rapi untuk dipasarkan.",
+      "Melarang petani daerah lain untuk menjual beras mereka di pasar perkotaan.",
+      "Membiarkan hasil panen membusuk di gudang sampai harga beras naik dengan sendirinya."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Mengolah hasil mentah (padi) menjadi barang olahan sekunder (seperti tepung atau camilan olahan beras) memberikan nilai tambah pada produk, memperpanjang daya simpan, dan mencegah kerugian akibat jatuhnya harga bahan mentah saat panen raya."
+  },
+  {
+    "id": 18,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Riko memiliki hobi berkebun. Ia memanfaatkan lahan kosong di samping rumahnya untuk menanam cabai, tomat, dan sayur sawi. Hasil panennya ia gunakan untuk memenuhi kebutuhan dapur keluarga sehari-hari.\n\nKeuntungan utama dari tindakan Riko tersebut dilihat dari sisi ekonomi dan kesehatan adalah...",
+    "options": [
+      "Menghemat pengeluaran belanja harian keluarga serta mendapatkan bahan pangan yang lebih segar dan sehat.",
+      "Menjadi distributor besar yang menguasai pasar bahan pangan di wilayah kota.",
+      "Mengurangi ketersediaan air bersih di sekitar lingkungan rumah.",
+      "Meningkatkan beban pengeluaran orang tua untuk membeli pupuk kimia secara berlebihan."
+    ],
+    "correctAnswer": 0,
+    "discussion": "Memenuhi kebutuhan dari hasil pemanfaatan lahan sendiri (berkebun) bermanfaat untuk menghemat pengeluaran keluarga dan menghasilkan bahan makanan segar tanpa kandungan kimia berbahaya."
+  },
+  {
+    "id": 19,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Perhatikan skenario berikut!\n\"Sebuah daerah di tepi pantai memiliki pemandangan yang sangat indah, tetapi warganya hidup dalam kemiskinan karena hanya mengandalkan hasil tangkapan ikan tradisional yang tidak menentu.\"\n\nLangkah optimal yang dapat dievaluasi dan direkomendasikan untuk meningkatkan kesejahteraan ekonomi warga daerah tersebut adalah...",
+    "options": [
+      "Menghentikan semua kegiatan penangkapan ikan dan melarang wisatawan datang.",
+      "Mengembangkan potensi wisata bahari (seperti penyewaan perahu, kuliner seafood, dan penginapan) bersisian dengan perikanan tangkap.",
+      "Menjual seluruh kawasan pantai kepada investor asing secara sepihak.",
+      "Mengalihkan seluruh pekerjaan warga menjadi buruh pabrik di kota lain."
+    ],
+    "correctAnswer": 1,
+    "discussion": "Mengombinasikan potensi laut (perikanan) dengan pengembangan sektor jasa pariwisata (wisata bahari, pengolahan seafood, penginapan) dapat membuka sumber pendapatan baru bagi warga pesisir sehingga kesejahteraan mereka meningkat."
+  },
+  {
+    "id": 20,
+    "type": "single",
+    "typeName": "Pilihan Ganda",
+    "question": "Sikap 'Pelaku Ekonomi yang Bijak' dapat ditunjukkan melalui aktivitas sehari-hari di rumah. Manakah dari pilihan berikut yang BUKAN merupakan contoh penerapan sikap bijak tersebut?",
+    "options": [
+      "Mematikan lampu dan alat elektronik saat selesai digunakan.",
+      "Mengambil makanan dengan porsi secukupnya agar tidak ada sisa yang terbuang.",
+      "Membuang barang-barang plastik bekas pakai langsung ke tempat sampah tanpa dipilah atau didaur ulang.",
+      "Menggunakan air bersih secukupnya saat mandi dan mencuci tangan."
+    ],
+    "correctAnswer": 2,
+    "discussion": "Sikap pelaku ekonomi yang bijak meliputi hemat energi (listrik/air), tidak boros makanan, dan mendaur ulang/memanfaatkan barang bekas. Membuang plastik bekas begitu saja tanpa pemilahan/daur ulang BUKAN termasuk sikap bijak terhadap SDA dan lingkungan."
+  }
+],
+
+            // 2. Kelompok Soal Pilihan Ganda Kompleks (21-40)
+            pilihanGandaKompleks: [
+  [
+  {
+    "id": 21,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah di antara barang/jasa berikut yang termasuk ke dalam kategori KEBUTUHAN PRIMER bagi manusia? (Pilih semua yang benar)",
+    "options": [
+      "Makanan dan air minum untuk sumber energi",
+      "Pakaian untuk melindungi tubuh dari cuaca",
+      "Sepeda motor keluaran terbaru untuk bergaya",
+      "Tempat tinggal/rumah sebagai tempat berlindung"
+    ],
+    "correctAnswer": [0, 1, 3],
+    "discussion": "Kebutuhan primer adalah kebutuhan pokok yang wajib dipenuhi agar manusia dapat bertahan hidup dan menjaga kesehatannya, meliputi makanan/minuman, pakaian (sandang), dan tempat tinggal (papan). Sepeda motor keluaran terbaru untuk bergaya termasuk kebutuhan tersier/mewah."
+  },
+  {
+    "id": 22,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah dari contoh pekerjaan berikut yang termasuk ke dalam sektor PRODUKSI JASA? (Pilih semua yang benar)",
+    "options": [
+      "Petani yang menanam padi di sawah",
+      "Guru yang mengajar siswa di sekolah",
+      "Dokter yang memeriksa dan merawat pasien",
+      "Sopir bus yang mengantar penumpang"
+    ],
+    "correctAnswer": [1, 2, 3],
+    "discussion": "Produksi jasa merupakan kegiatan menghasilkan layanan yang bermanfaat bagi orang lain (tidak menghasilkan benda fisik baru). Guru, dokter, dan sopir bus memberikan jasa, sedangkan petani menghasilkan barang berupa hasil pertanian (padi)."
+  },
+  {
+    "id": 23,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah pernyataan yang merupakan CIRI-CIRI DARI PASAR TRADISIONAL? (Pilih semua yang benar)",
+    "options": [
+      "Terjadi interaksi langsung dan proses tawar-menawar harga antara penjual dan pembeli",
+      "Pembeli mengambil barang sendiri dengan sistem swalayan dan membayar di kasir",
+      "Harga barang terjangkau dan menjadi tempat bersosialisasi antarwarga",
+      "Selalu menggunakan kartu debit atau uang elektronik untuk pembayaran"
+    ],
+    "correctAnswer": [0, 2],
+    "discussion": "Pasar tradisional dicirikan oleh interaksi tawar-menawar harga, suasana yang akrab/sosialisasi, dan harga terjangkau. Pembayaran swalayan via kasir dan transaksi elektronik merupakan ciri dari pasar modern."
+  },
+  {
+    "id": 24,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Pernyataan manakah yang paling tepat menggambarkan potensi dan KEGIATAN EKONOMI MASYARAKAT DI DAERAH PEGUNUNGAN? (Pilih semua yang benar)",
+    "options": [
+      "Masyarakat banyak bekerja sebagai nelayan pencari ikan dan cumi-cumi",
+      "Banyak dibudidayakan tanaman sayur seperti wortel, kubis, dan kentang",
+      "Sektor pariwisata dikembangkan melalui kebun buah, taman bunga, dan perkemahan",
+      "Sangat cocok untuk tempat perkebunan teh dan kopi karena udaranya sejuk"
+    ],
+    "correctAnswer": [1, 2, 3],
+    "discussion": "Daerah pegunungan berudara sejuk dan berkerlan subur sehingga cocok untuk pertanian hortikultura (sayur/buah), perkebunan (teh/kopi), serta wisata alam. Pekerjaan nelayan adalah karakteristik kegiatan ekonomi masyarakat pantai."
+  },
+  {
+    "id": 25,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah di antara profesi/kegiatan berikut yang bertindak sebagai DISTRIBUTOR dalam kegiatan ekonomi? (Pilih semua yang benar)",
+    "options": [
+      "Kurir ekspedisi yang mengantarkan barang pesanan belanja online",
+      "Sopir truk logistik yang membawa hasil panen sayur dari desa ke pasar kota",
+      "Peternak yang memelihara ayam untuk diambil telurnya",
+      "Pedagang grosir yang membeli barang dari pabrik untuk dijual ke toko eceran"
+    ],
+    "correctAnswer": [0, 1, 3],
+    "discussion": "Distributor adalah pihak yang menyalurkan barang/jasa dari produsen ke konsumen. Kurir, sopir truk logistik, dan pedagang grosir menjalankan fungsi penyaluran ini. Peternak ayam bertindak sebagai produsen."
+  },
+  {
+    "id": 26,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah contoh pemanfaatan teknologi yang membantu mempercepat dan MEMPERMUDAH PROSES DISTRIBUSI BARANG? (Pilih semua yang benar)",
+    "options": [
+      "Sistem pemesanan armada truk dan pengiriman barang melalui aplikasi logistik digital",
+      "Sistem lacak lokasi paket (resi tracking) secara real-time",
+      "Penggunaan cangkul tradisional untuk mengolah tanah pertanian",
+      "Penggunaan mesin gudang otomatis untuk memilah paket barang pesanan"
+    ],
+    "correctAnswer": [0, 1, 3],
+    "discussion": "Aplikasi logistik digital, resi tracking real-time, dan mesin pemilah gudang merupakan teknologi dalam bidang distribusi. Cangkul tradisional adalah alat bercocok tanam (produksi)."
+  },
+  {
+    "id": 27,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah di antara sumber daya alam berikut yang TERMASUK SUMBER DAYA ALAM YANG DAPAT DIPERBARUI jika dikelola dengan baik? (Pilih semua yang benar)",
+    "options": [
+      "Tumbuhan sayur dan buah-buahan",
+      "Minyak bumi",
+      "Batu bara",
+      "Air dan tanah subur"
+    ],
+    "correctAnswer": [0, 3],
+    "discussion": "Tumbuhan, air, dan tanah tergolong SDA yang dapat diperbarui atau dipulihkan kembali. Sebaliknya, minyak bumi dan batu bara adalah SDA tambang fosil yang jumlahnya terbatas dan tidak dapat diperbarui."
+  },
+  {
+    "id": 28,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah bentuk penerapannya yang mencerminkan SIKAP BIJAK SEBAGAI PELAKU EKONOMI di lingkungan rumah dan sekolah? (Pilih semua yang benar)",
+    "options": [
+      "Membeli makanan berlebihan sampai akhirnya tersisa dan dibuang",
+      "Mematikan pendingin ruangan dan sakelar listrik jika tidak digunakan",
+      "Menggunakan air bersih secukupnya saat mencuci tangan atau mandi",
+      "Mendaur ulang kertas dan wadah bekas menjadi barang kerajinan berguna"
+    ],
+    "correctAnswer": [1, 2, 3],
+    "discussion": "Hemat energi listrik, hemat air, dan mendaur ulang sampah adalah wujud nyata perilaku bijak konsumen. Membuang makanan sisa merupakan perilaku boros dan bertentangan dengan prinsip ekonomi bijak."
+  },
+  {
+    "id": 29,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah yang merupakan PERAN ATAU MANFAAT KEGIATAN EKONOMI bagi pembangunan suatu daerah? (Pilih semua yang benar)",
+    "options": [
+      "Membantu warga memperoleh penghasilan untuk memenuhi kebutuhan hidup",
+      "Meningkatkan pendapatan pajak daerah untuk membangun jalan dan sekolah",
+      "Menyebabkan ketergantungan penuh pada bantuan dari luar negeri",
+      "Memperluas lapangan kerja sehingga kesejahteraan masyarakat meningkat"
+    ],
+    "correctAnswer": [0, 1, 3],
+    "discussion": "Kegiatan ekonomi daerah yang aktif berfungsi menyediakan lapangan kerja, memberikan penghasilan warga, dan menghasilkan pajak untuk pembangunan fasilitas publik. Kegiatan ini tidak bertujuan menciptakan ketergantungan pada luar negeri."
+  },
+  {
+    "id": 30,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah dampak negatif yang dapat terjadi jika manusia MEMANFAATKAN SUMBER DAYA ALAM SECARA BOROS DAN BERLEBIHAN? (Pilih semua yang benar)",
+    "options": [
+      "Lingkungan hidup menjadi rusak dan tercemar",
+      "Proses produksi barang terganggu karena bahan baku habis",
+      "Keberadaan hewan dan tumbuhan terancam punah",
+      "Kesejahteraan dan kesehatan masyarakat terus meningkat pesat"
+    ],
+    "correctAnswer": [0, 1, 2],
+    "discussion": "Eksploitasi SDA secara berlebihan memicu kerusakan lingkungan, mengganggu kelangsungan rantai produksi, serta memicu kepunahan keanekaragaman hayati. Hal ini justru menurunkan tingkat kesehatan dan kesejahteraan manusia."
+  },
+  {
+    "id": 31,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah pernyataan yang BENAR mengenai KEGIATAN KONSUMSI? (Pilih semua yang benar)",
+    "options": [
+      "Pelakunya disebut sebagai konsumen",
+      "Merupakan tahap akhir dari serangkaian alur kegiatan ekonomi",
+      "Bertujuan untuk menghasilkan barang dan jasa baru",
+      "Contohnya adalah siswa yang membeli dan memakan roti di kantin sekolah"
+    ],
+    "correctAnswer": [0, 1, 3],
+    "discussion": "Konsumsi adalah kegiatan menggunakan/menghabiskan nilai guna barang/jasa untuk memenuhi kebutuhan (tahap akhir alur ekonomi). Pelakunya disebut konsumen. Menghasilkan barang/jasa baru adalah definisi kegiatan produksi."
+  },
+  {
+    "id": 32,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Di daerah perkotaan yang padat, kegiatan ekonomi berkembang pesat pada sektor jasa. Manakah profesi berikut yang TERMASUK SEKTOR JASA DI PERKOTAAN? (Pilih semua yang benar)",
+    "options": [
+      "Montir di bengkel kendaraan",
+      "Dokter spesialis di rumah sakit",
+      "Nelayan pembuat terasi",
+      "Pegawai kantor perbankan"
+    ],
+    "correctAnswer": [0, 1, 3],
+    "discussion": "Montir (perbaikan), dokter (layanan kesehatan), dan pegawai bank (layanan keuangan) menawarkan bentuk pelayanan/jasa di kota. Nelayan pembuat terasi tergolong pelaku industri/pengolahan barang di daerah pesisir."
+  },
+  {
+    "id": 33,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah upaya-upaya berikut yang dapat dilakukan untuk MENJAGA KELESTARIAN SUMBER DAYA ALAM TANAH DAN AIR? (Pilih semua yang benar)",
+    "options": [
+      "Menanam pohon dan menjaga kebersihan lingkungan dari sampah plastik",
+      "Membuang limbah detergen langsung ke saluran air warga",
+      "Menggunakan air bersih secara bijak dan tidak membiarkan kran bocor",
+      "Menggunakan pupuk kimia secara berlebihan tanpa batas"
+    ],
+    "correctAnswer": [0, 2],
+    "discussion": "Reboisasi/menanam pohon, menghemat air, dan menjaga lingkungan dari sampah menjaga keberlanjutan tanah serta air. Membuang limbah ke saluran warga dan penggunaan pupuk kimia berlebih dapat merusak tanah dan mencemari air."
+  },
+  {
+    "id": 34,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah yang merupakan ALASAN mengapa pemenuhan KEBUTUHAN TERSIER tidak bersifat mendesak? (Pilih semua yang benar)",
+    "options": [
+      "Kebutuhan tersier bertujuan untuk memberikan kepuasan, hiburan, atau status sosial",
+      "Tanpa memenuhi kebutuhan tersier, manusia tetap bisa bertahan hidup secara layak",
+      "Kebutuhan tersier adalah kebutuhan pokok untuk menjaga kesehatan tubuh",
+      "Pemenuhan kebutuhan tersier harus disesuaikan dengan kemampuan ekonomi berlebih"
+    ],
+    "correctAnswer": [0, 1, 3],
+    "discussion": "Kebutuhan tersier bersifat barang mewah/tambahan untuk kepuasan atau gengsi sosial, bukan untuk kelangsungan hidup dasar. Oleh karena itu, jika tidak dipenuhi manusia tetap dapat bertahan hidup."
+  },
+  {
+    "id": 35,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah fasilitas INFRASTRUKTUR yang berperan mendasar dalam menunjang kelancaran kegiatan ekonomi daerah? (Pilih semua yang benar)",
+    "options": [
+      "Jalan raya dan jembatan penyeberangan barang",
+      "Jaringan listrik dan pasokan air bersih bagi industri",
+      "Pelabuhan kapal dan bandara udara",
+      "Taman bermain mewah khusus pihak swasta"
+    ],
+    "correctAnswer": [0, 1, 2],
+    "discussion": "Infrastruktur pendukung ekonomi meliputi sarana transportasi jalan/jembatan, simpul distribusi (pelabuhan/bandara), serta utilitas dasar (listrik dan air bersih)."
+  },
+  {
+    "id": 36,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah contoh pemanfaatan SUMBER DAYA ALAM KAYU DARI HUTAN secara tepat dalam kegiatan produksi? (Pilih semua yang benar)",
+    "options": [
+      "Pembuatan meja, kursi, dan lemari oleh pengrajin mebel",
+      "Bahan baku pembuatan kertas di pabrik",
+      "Bahan pembuatan kerangka rumah dan perahu tradisional",
+      "Bahan baku utama pembuatan kain katun pakaian"
+    ],
+    "correctAnswer": [0, 1, 2],
+    "discussion": "Kayu hutan dimanfaatkan untuk industri mebel/perabot, bahan pulp kertas, serta konstruksi bangunan/perahu. Kain katun terbuat dari serat tanaman kapas, bukan kayu hutan."
+  },
+  {
+    "id": 37,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah tindakan seorang pelajar yang MENUNJUKKAN RASA CINTA DAN PERAN AKTIF terhadap perkembangan produk lokal? (Pilih semua yang benar)",
+    "options": [
+      "Memilih membeli tas dan sepatu buatan pengrajin lokal daerahnya",
+      "Mengejek produk dalam negeri karena harganya lebih murah",
+      "Membeli oleh-oleh khas daerah saat berkunjung ke tempat wisata lokal",
+      "Mengajak teman-teman sekolah untuk bangga menggunakan Batik"
+    ],
+    "correctAnswer": [0, 2, 3],
+    "discussion": "Membeli karya pengrajin daerah, membeli jajanan/oleh-oleh khas, dan bangga memakai busana tradisional batik merupakan wujud apresiasi terhadap ekonomi dan produk lokal."
+  },
+  {
+    "id": 38,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah pernyataan yang BENAR mengenai perbedaan KEBUTUHAN SEKUNDER dan KEBUTUHAN TERSIER? (Pilih semua yang benar)",
+    "options": [
+      "Kebutuhan sekunder dipenuhi setelah kebutuhan primer agar hidup lebih nyaman",
+      "Kebutuhan tersier dipenuhi terlebih dahulu sebelum kebutuhan primer",
+      "Kebutuhan sekunder contohnya alat tulis, sarana komunikasi, dan peralatan rumah",
+      "Kebutuhan tersier biasanya hanya terjangkau oleh masyarakat berpenghasilan lebih tinggi"
+    ],
+    "correctAnswer": [0, 2, 3],
+    "discussion": "Kebutuhan sekunder melengkapi kebutuhan primer untuk kenyamanan (seperti penunjang belajar/kerja). Kebutuhan tersier dipenuhi paling akhir jika ada kemampuan ekonomi lebih. Pernyataan bahwa tersier dipenuhi sebelum primer adalah salah."
+  },
+  {
+    "id": 39,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Di daerah pantai, masyarakat mengoptimalkan potensi alam dengan mengembangkan kegiatan ekonomi di bidang WISATA BAHARI DAN PENGOLAHAN HASIL LAUT. Manakah bentuk kegiatan yang sesuai? (Pilih semua yang benar)",
+    "options": [
+      "Buka usaha penyewaan perahu wisata dan alat penyelaman",
+      "Membuka penginapan atau restoran seafood di tepi pantai",
+      "Membuat industri olahan ikan asin dan kerupuk ikan",
+      "Membuka perkebunan stroberi dan tanaman teh"
+    ],
+    "correctAnswer": [0, 1, 2],
+    "discussion": "Penyewaan perahu, restoran seafood, penginapan pantai, serta industri kerupuk/ikan asin memanfaatkan potensi pantai/laut. Perkebunan stroberi dan teh berada di dataran tinggi/pegunungan."
+  },
+  {
+    "id": 40,
+    "type": "multiple",
+    "typeName": "Pilihan Ganda Kompleks",
+    "question": "Manakah di antara faktor berikut yang MEMPENGARUHI PERBEDAAN KEBUTUHAN HIDUP antara satu orang dengan orang lainnya? (Pilih semua yang benar)",
+    "options": [
+      "Usia dan tingkat perkembangan diri",
+      "Jenis pekerjaan yang ditekuni sehari-hari",
+      "Kondisi lingkungan tempat tinggal",
+      "Jumlah warna favorit yang disukai"
+    ],
+    "correctAnswer": [0, 1, 2],
+    "discussion": "Kebutuhan tiap orang berbeda-beda dipengaruhi oleh usia (anak vs dewasa), profesi/pekerjaan (pelajar vs pekerja), serta tempat tinggal (pegunungan vs pantai). Warna favorit merupakan preferensi hobi/selera, bukan faktor penentu jenis kebutuhan hidup dasar."
+  }
+],
+
+            // 3. Kelompok Soal Benar / Salah (41-50)
+            benarSalah: [
+  [
+  {
+    "id": 41,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis hubungan antara tingkat kepentingan kebutuhan manusia dan urutan pemenuhannya berikut:",
+    "statements": [
+      { "id": "s1", "text": "Kebutuhan primer harus dipenuhi terlebih dahulu sebelum memenuhi kebutuhan sekunder dan tersier karena berkaitan langsung dengan kelangsungan hidup manusia." },
+      { "id": "s2", "text": "Pembelian barang mewah seperti mobil sport untuk menaikkan gengsi merupakan kebutuhan sekunder yang wajib dipenuhi oleh semua lapisan masyarakat." },
+      { "id": "s3", "text": "Buku tulis dan alat sekolah bagi seorang pelajar dikategorikan sebagai kebutuhan sekunder yang mendukung kelancaran kegiatan belajarnya." }
+    ],
+    "correctAnswer": { "s1": true, "s2": false, "s3": true },
+    "discussion": "Kebutuhan primer merupakan kebutuhan dasar untuk bertahan hidup yang wajib didahulukan. Pembelian mobil sport mewah untuk status sosial tergolong kebutuhan tersier (bukan sekunder) dan tidak wajib bagi semua orang. Alat tulis bagi pelajar berfungsi mendukung kelancaran belajar setelah kebutuhan pokok terpenuhi, sehingga termasuk kebutuhan sekunder."
+  },
+  {
+    "id": 42,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis karakteristik dan perbandingan pasar tradisional dengan pasar modern berikut:",
+    "statements": [
+      { "id": "s1", "text": "Pasar tradisional memungkinkan terjadinya proses tawar-menawar harga dan interaksi sosial langsung antara penjual dan pembeli." },
+      { "id": "s2", "text": "Pasar modern menggunakan sistem swalayan di mana harga barang sudah tertera jelas pada label sehingga tidak dapat ditawar." },
+      { "id": "s3", "text": "Kelebihan utama pasar tradisional dibandingkan pasar modern adalah ketersediaan fasilitas pendingin udara (AC) dan sistem pembayaran elektronik di setiap lapak." }
+    ],
+    "correctAnswer": { "s1": true, "s2": true, "s3": false },
+    "discussion": "Pasar tradisional unggul dalam hal tawar-menawar harga dan keakraban interaksi sosial. Pasar modern dicirikan oleh label harga pasti (swalayan) tanpa tawar-menawar. Fasilitas AC dan pembayaran elektronik merupakan ciri pasar modern, bukan pasar tradisional."
+  },
+  {
+    "id": 43,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis peran pelaku ekonomi (produsen, distributor, konsumen) berikut:",
+    "statements": [
+      { "id": "s1", "text": "Petani yang menanam padi dan penjahit yang membuat pakaian berperan sebagai produsen karena menghasilkan barang." },
+      { "id": "s2", "text": "Sopir truk logistik dan kurir ekspedisi berperan sebagai konsumen karena mereka membeli barang dari pabrik." },
+      { "id": "s3", "text": "Siswa yang membeli dan memakan nasi goreng di kantin sekolah bertindak sebagai konsumen." }
+    ],
+    "correctAnswer": { "s1": true, "s2": false, "s3": true },
+    "discussion": "Petani dan penjahit adalah produsen yang menghasilkan produk. Sopir truk dan kurir bertindak sebagai distributor yang menyalurkan barang (bukan konsumen). Siswa yang membeli dan menghabiskan makanan merupakan konsumen akhir."
+  },
+  {
+    "id": 44,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis pengaruh kondisi geografis terhadap kegiatan ekonomi masyarakat berikut:",
+    "statements": [
+      { "id": "s1", "text": "Masyarakat di daerah pegunungan sebagian besar bekerja di bidang pertanian holtikultura dan perkebunan teh karena udaranya sejuk dan tanahnya subur." },
+      { "id": "s2", "text": "Kegiatan ekonomi utama masyarakat di wilayah pantai adalah bertani padi irigasi dan mengelola hutan jati." },
+      { "id": "s3", "text": "Perkotaan menjadi pusat kegiatan ekonomi non-pertanian seperti perdagangan, industri pabrik, dan penyediaan jasa." }
+    ],
+    "correctAnswer": { "s1": true, "s2": false, "s3": true },
+    "discussion": "Daerah pegunungan sangat cocok untuk pertanian sayur dan perkebunan karena faktor suhu dan kesuburan tanah. Wilayah pantai didominasi oleh kegiatan perikanan/laut, bukan pertanian padi. Perkotaan merupakan pusat industri, perdagangan, dan jasa karena kepadatan penduduk serta keterbatasan lahan."
+  },
+  {
+    "id": 45,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis keterkaitan antara kegiatan ekonomi dan ketersediaan sarana pendukung (infrastruktur) berikut:",
+    "statements": [
+      { "id": "s1", "text": "Jalan dan jembatan yang rusak parah di suatu daerah dapat menghambat pengiriman hasil pertanian dan menyebabkan harga barang naik." },
+      { "id": "s2", "text": "Ketersediaan moda transportasi umum yang memadai dapat menurunkan biaya pengiriman barang dari produsen ke konsumen." },
+      { "id": "s3", "text": "Pembangunan pelabuhan dan bandara tidak memiliki pengaruh terhadap kelancaran kegiatan perdagangan antarwilayah." }
+    ],
+    "correctAnswer": { "s1": true, "s2": true, "s3": false },
+    "discussion": "Infrastruktur jalan/jembatan yang rusak menghambat distribusi dan menaikkan biaya logistik. Transportasi yang efisien akan memperlancar aliran barang dan menekan biaya distribusi. Pelabuhan dan bandara adalah infrastruktur vital yang sangat mempengaruhi perdagangan antarwilayah."
+  },
+  {
+    "id": 46,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis dampak pemanfaatan teknologi dalam alur kegiatan ekonomi berikut:",
+    "statements": [
+      { "id": "s1", "text": "Penggunaan mesin modern di pabrik membantu proses produksi menjadi lebih cepat dan menghasilkan barang dalam jumlah lebih banyak." },
+      { "id": "s2", "text": "Kehadiran aplikasi belanja online mempersulit konsumen dalam memperoleh barang yang dibutuhkan dari daerah lain." },
+      { "id": "s3", "text": "Sistem pergudangan digital dan transportasi logistik terintegrasi dapat mempercepat proses distribusi barang." }
+    ],
+    "correctAnswer": { "s1": true, "s2": false, "s3": true },
+    "discussion": "Teknologi mesin otomatis memicu efisiensi produksi barang. Aplikasi belanja online justru mempermudah dan mempercepat akses transaksi konsumen secara praktis. Sistem gudang digital dan logistik memperlancar rantai distribusi barang."
+  },
+  {
+    "id": 47,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis sifat dan keberlanjutan Sumber Daya Alam (SDA) berikut:",
+    "statements": [
+      { "id": "s1", "text": "Air, tanah subur, dan berbagai jenis tumbuhan tergolong dalam sumber daya alam yang dapat diperbarui." },
+      { "id": "s2", "text": "Batu bara dan minyak bumi merupakan sumber daya alam yang tidak dapat diperbarui karena proses pembentukannya membutuhkan waktu jutaan tahun." },
+      { "id": "s3", "text": "Penggunaan minyak bumi secara terus-menerus tanpa batas tidak akan mempengaruhi kegiatan ekonomi di masa depan karena jumlahnya melimpah." }
+    ],
+    "correctAnswer": { "s1": true, "s2": true, "s3": false },
+    "discussion": "Air, tanah, dan tumbuhan dapat dipulihkan/diperbarui jika dikelola dengan baik. Batu bara dan minyak bumi merupakan bahan bakar fosil yang terbatas dan tidak dapat diperbarui dalam waktu singkat. Eksploitasi minyak bumi tanpa kendali dapat menyebabkan kelangkaan dan mengganggu stabilitas ekonomi."
+  },
+  {
+    "id": 48,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis dampak kerusakan lingkungan terhadap kegiatan perekonomian masyarakat berikut:",
+    "statements": [
+      { "id": "s1", "text": "Pencemaran air sungai akibat limbah pabrik dapat mengganggu kesehatan masyarakat dan merugikan peternak ikan air tawar." },
+      { "id": "s2", "text": "Penebangan hutan secara liar tanpa penanaman kembali (reboisasi) dapat menyebabkan bencana tanah longsor yang merusak infrastruktur jalan." },
+      { "id": "s3", "text": "Kepunahan hewan dan tumbuhan akibat kerusakan alam akan meningkatkan kelancaran kegiatan produksi industri bahan pangan." }
+    ],
+    "correctAnswer": { "s1": true, "s2": true, "s3": false },
+    "discussion": "Limbah industri merusak ekosistem perairan dan merugikan mata pencaharian peternak ikan. Penebangan liar memicu tanah longsor yang merusak akses transportasi/infrastruktur. Kepunahan keanekaragaman hayati justru menghambat dan mengancam pasokan bahan baku industri pangan."
+  },
+  {
+    "id": 49,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis peran dan kontribusi masyarakat lokal terhadap pembangunan ekonomi daerah berikut:",
+    "statements": [
+      { "id": "s1", "text": "Membeli produk hasil usaha mikro, kecil, dan menengah (UMKM) lokal membantu menggerakkan roda perekonomian warga sekitar." },
+      { "id": "s2", "text": "Pajak yang dibayarkan oleh para pelaku usaha kepada pemerintah daerah akan digunakan untuk membangun fasilitas umum seperti puskesmas dan sekolah." },
+      { "id": "s3", "text": "Mengonsumsi produk impor dari luar negeri secara berlebihan lebih menguntungkan perekonomian pedagang lokal daripada membeli produk tetangga." }
+    ],
+    "correctAnswer": { "s1": true, "s2": true, "s3": false },
+    "discussion": "Membeli produk UMKM lokal memutar alur pendapatan di tingkat daerah. Hasil pemungutan pajak daerah dialokasikan kembali untuk pembangunan sarana publik. Membeli barang impor berlebihan justru mengalirkan modal ke luar dan kurang mendukung usaha pedagang lokal."
+  },
+  {
+    "id": 50,
+    "type": "true_false",
+    "typeName": "Pernyataan Benar / Salah",
+    "question": "Tentukan kebenaran dari setiap pernyataan mengenai analisis penerapan perilaku konsumsi yang bijak dalam kehidupan sehari-hari berikut:",
+    "statements": [
+      { "id": "s1", "text": "Menyisihkan uang saku untuk ditabung dan mengutamakan kebutuhan sekolah merupakan contoh penerapan prinsip ekonomi yang bijak bagi pelajar." },
+      { "id": "s2", "text": "Perilaku menghabiskan makanan dan membiarkan kran air mengalir terus-menerus adalah wujud sikap menghargai sumber daya alam." },
+      { "id": "s3", "text": "Mengolah dan mendaur ulang barang bekas menjadi kerajinan bernilai guna termasuk tindakan kreatif dalam mendukung kelestarian alam dan hemat pengeluaran." }
+    ],
+    "correctAnswer": { "s1": true, "s2": false, "s3": true },
+    "discussion": "Menabung dan memprioritaskan kebutuhan merupakan ciri konsumen bijak. Membuang makanan dan pemborosan air merupakan sikap konsumtif yang merusak lingkungan. Daur ulang barang bekas menggabungkan prinsip kelestarian lingkungan dan nilai efisiensi ekonomi."
+  }
+]
+        };
+
+        // Menggabungkan seluruh bank soal ke dalam 1 array aktif secara otomatis
+        const questionsData = [
+            ...questionBank.pilihanGanda,
+            ...questionBank.pilihanGandaKompleks,
+            ...questionBank.benarSalah
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = {}; // Format: { questionId: answer }
+        let markedQuestions = new Set();
+        let timerInterval = null;
+        let timeRemaining = 60 * 60; // 60 menit
+        let totalTimeSpent = 0;
+        let userProfile = { name: '' };
+        let lastExamPayload = null;
+
+        let GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7sxLLZrQZGtegAsdOA_PTpBWthaUABZ26DiBvoPgYifOO3DEl6EE-pIReAdxUz-7z/exec";
+
+        // Inisialisasi Tampilan Jumlah Soal Dinamis saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            const total = questionsData.length;
+            const infoEl = document.getElementById('total-questions-info');
+            const badgeEl = document.getElementById('total-badge');
+            if (infoEl) infoEl.textContent = `${total} soal`;
+            if (badgeEl) badgeEl.textContent = total;
+        });
+
+        function openAdminPasswordModal() {
+            document.getElementById('admin-password-input').value = '';
+            document.getElementById('admin-password-error').classList.add('hidden');
+            document.getElementById('admin-modal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('admin-password-input').focus();
+            }, 100);
+        }
+
+        function closeAdminPasswordModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function handleAdminPasswordSubmit(e) {
+            e.preventDefault();
+            const password = document.getElementById('admin-password-input').value;
+            if (password === 'admin123') {
+                closeAdminPasswordModal();
+                document.getElementById('webhook-config-panel').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-password-error').classList.remove('hidden');
+            }
+        }
+
+        function closeAdminConfigPanel() {
+            document.getElementById('webhook-config-panel').classList.add('hidden');
+        }
+
+        function handleStartExam(event) {
+            event.preventDefault();
+            const name = document.getElementById('user-name').value.trim();
+
+            if (!name) return;
+
+            userProfile.name = name;
+
+            document.getElementById('nav-user-name').textContent = name;
+
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('header-exam-info').classList.remove('hidden');
+            document.getElementById('header-exam-info').classList.add('flex');
+            document.getElementById('exam-app').classList.remove('hidden');
+
+            startTimer();
+            renderQuestion();
+            renderQuestionGrid();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            const timerDisplay = document.getElementById('timer');
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                totalTimeSpent++;
+
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+
+                timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                if (timeRemaining <= 300) {
+                    timerDisplay.classList.add('text-rose-600', 'animate-pulse');
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timeout-modal').classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        function renderQuestion() {
+            const q = questionsData[currentQuestionIndex];
+            
+            document.getElementById('question-number-badge').textContent = `Soal ${currentQuestionIndex + 1} dari ${questionsData.length}`;
+            document.getElementById('question-type-badge').textContent = q.typeName;
+            document.getElementById('question-container').textContent = q.question;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const currentAns = userAnswers[q.id];
+
+            if (q.type === 'single') {
+                q.options.forEach((opt, idx) => {
+                    const isSelected = currentAns === idx;
+                    const optCard = document.createElement('label');
+                    optCard.className = `flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition ${
+                        isSelected 
+                            ? 'bg-blue-50/70 border-blue-500 shadow-sm text-blue-900 font-medium' 
+                            : 'bg-slate-50 border-slate-200 hover:bg-slate-100/80 text-slate-700'
+                    }`;
+                    optCard.innerHTML = `
+                        <input type="radio" name="q_${q.id}" value="${idx}" ${isSelected ? 'checked' : ''} onchange="saveSingleChoice(${q.id}, ${idx})" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                        <span class="text-sm">${String.fromCharCode(65 + idx)}. ${opt}</span>
+                    `;
+                    optionsContainer.appendChild(optCard);
+                });
+            } else if (q.type === 'multiple') {
+                const selectedArr = Array.isArray(currentAns) ? currentAns : [];
+                q.options.forEach((opt, idx) => {
+                    const isChecked = selectedArr.includes(idx);
+                    const optCard = document.createElement('label');
+                    optCard.className = `flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition ${
+                        isChecked 
+                            ? 'bg-blue-50/70 border-blue-500 shadow-sm text-blue-900 font-medium' 
+                            : 'bg-slate-50 border-slate-200 hover:bg-slate-100/80 text-slate-700'
+                    }`;
+                    optCard.innerHTML = `
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="saveMultipleChoice(${q.id}, ${idx})" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                        <span class="text-sm">${String.fromCharCode(65 + idx)}. ${opt}</span>
+                    `;
+                    optionsContainer.appendChild(optCard);
+                });
+            } else if (q.type === 'true_false') {
+                const tfAns = currentAns || {};
+                const tableContainer = document.createElement('div');
+                tableContainer.className = 'border border-slate-200 rounded-xl overflow-hidden text-xs';
+
+                let rowsHtml = '';
+                q.statements.forEach((stmt, idx) => {
+                    const stmtVal = tfAns[stmt.id];
+                    rowsHtml += `
+                        <tr class="${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} border-b border-slate-200">
+                            <td class="p-3 text-slate-800 text-sm">${stmt.text}</td>
+                            <td class="p-3 text-center w-24">
+                                <label class="cursor-pointer inline-flex items-center gap-1">
+                                    <input type="radio" name="tf_${stmt.id}" value="true" ${stmtVal === true ? 'checked' : ''} onchange="saveTrueFalse('${q.id}', '${stmt.id}', true)" class="text-blue-600">
+                                    <span>Benar</span>
+                                </label>
+                            </td>
+                            <td class="p-3 text-center w-24">
+                                <label class="cursor-pointer inline-flex items-center gap-1">
+                                    <input type="radio" name="tf_${stmt.id}" value="false" ${stmtVal === false ? 'checked' : ''} onchange="saveTrueFalse('${q.id}', '${stmt.id}', false)" class="text-rose-600">
+                                    <span>Salah</span>
+                                </label>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tableContainer.innerHTML = `
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">Pernyataan</th>
+                                <th class="p-3 text-center">Benar</th>
+                                <th class="p-3 text-center">Salah</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                `;
+                optionsContainer.appendChild(tableContainer);
+            }
+
+            // Update Flag button state
+            const flagBtn = document.getElementById('flag-btn');
+            if (markedQuestions.has(q.id)) {
+                flagBtn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-amber-500 border-amber-500 text-white";
+            } else {
+                flagBtn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-slate-50 border-slate-300 text-slate-600 hover:bg-slate-100";
+            }
+
+            // Navigation Buttons state
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('prev-btn').style.opacity = currentQuestionIndex === 0 ? "0.5" : "1";
+            
+            const nextBtn = document.getElementById('next-btn');
+            if (currentQuestionIndex === questionsData.length - 1) {
+                nextBtn.innerHTML = `<span>Selesai</span> <i class="fa-solid fa-check"></i>`;
+                nextBtn.onclick = openSubmitModal;
+            } else {
+                nextBtn.innerHTML = `<span>Berikutnya</span> <i class="fa-solid fa-chevron-right"></i>`;
+                nextBtn.onclick = () => navigateQuestion(1);
+            }
+
+            updateProgressStats();
+        }
+
+        function saveSingleChoice(questionId, optionIndex) {
+            userAnswers[questionId] = optionIndex;
+            renderQuestion();
+            renderQuestionGrid();
+        }
+
+        function saveMultipleChoice(questionId, optionIndex) {
+            if (!Array.isArray(userAnswers[questionId])) {
+                userAnswers[questionId] = [];
+            }
+            const idx = userAnswers[questionId].indexOf(optionIndex);
+            if (idx > -1) {
+                userAnswers[questionId].splice(idx, 1);
+            } else {
+                userAnswers[questionId].push(optionIndex);
+            }
+            if (userAnswers[questionId].length === 0) {
+                delete userAnswers[questionId];
+            }
+            renderQuestion();
+            renderQuestionGrid();
+        }
+
+        function saveTrueFalse(questionId, statementId, val) {
+            if (!userAnswers[questionId] || typeof userAnswers[questionId] !== 'object') {
+                userAnswers[questionId] = {};
+            }
+            userAnswers[questionId][statementId] = val;
+            renderQuestion();
+            renderQuestionGrid();
+        }
+
+        function toggleMarkCurrentQuestion() {
+            const qId = questionsData[currentQuestionIndex].id;
+            if (markedQuestions.has(qId)) {
+                markedQuestions.delete(qId);
+            } else {
+                markedQuestions.add(qId);
+            }
+            renderQuestion();
+            renderQuestionGrid();
+        }
+
+        function navigateQuestion(direction) {
+            const nextIndex = currentQuestionIndex + direction;
+            if (nextIndex >= 0 && nextIndex < questionsData.length) {
+                currentQuestionIndex = nextIndex;
+                renderQuestion();
+                renderQuestionGrid();
+            }
+        }
+
+        function jumpToQuestion(index) {
+            currentQuestionIndex = index;
+            renderQuestion();
+            renderQuestionGrid();
+        }
+
+        function renderQuestionGrid() {
+            const grid = document.getElementById('question-grid');
+            grid.innerHTML = '';
+
+            questionsData.forEach((q, idx) => {
+                const isCurrent = idx === currentQuestionIndex;
+                const isAnswered = isQuestionAnswered(q);
+                const isMarked = markedQuestions.has(q.id);
+
+                let btnClass = "bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200";
+
+                if (isMarked) {
+                    btnClass = "bg-amber-500 border-amber-600 text-white font-bold";
+                } else if (isAnswered) {
+                    btnClass = "bg-blue-600 border-blue-700 text-white font-bold";
+                }
+
+                const ringClass = isCurrent ? "ring-2 ring-blue-500 ring-offset-2" : "";
+
+                const btn = document.createElement('button');
+                btn.className = `w-10 h-10 rounded-xl text-xs flex items-center justify-center border font-semibold transition ${btnClass} ${ringClass}`;
+                btn.textContent = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+
+                grid.appendChild(btn);
+            });
+        }
+
+        function isQuestionAnswered(q) {
+            const ans = userAnswers[q.id];
+            if (ans === undefined || ans === null) return false;
+
+            if (q.type === 'single') return true;
+            if (q.type === 'multiple') return Array.isArray(ans) && ans.length > 0;
+            if (q.type === 'true_false') {
+                return Object.keys(ans).length === q.statements.length;
+            }
+            return false;
+        }
+
+        function updateProgressStats() {
+            let answeredCount = 0;
+            questionsData.forEach(q => {
+                if (isQuestionAnswered(q)) answeredCount++;
+            });
+
+            document.getElementById('answered-badge').textContent = answeredCount;
+            document.getElementById('marked-badge').textContent = markedQuestions.size;
+            document.getElementById('total-badge').textContent = questionsData.length;
+
+            const percentage = (answeredCount / questionsData.length) * 100;
+            document.getElementById('exam-progress-bar').style.width = `${percentage}%`;
+        }
+
+        function openSubmitModal() {
+            let answeredCount = 0;
+            questionsData.forEach(q => {
+                if (isQuestionAnswered(q)) answeredCount++;
+            });
+            document.getElementById('modal-answered-count').textContent = answeredCount;
+            document.getElementById('modal-total-count').textContent = questionsData.length;
+            document.getElementById('submit-modal').classList.remove('hidden');
+        }
+
+        function closeSubmitModal() {
+            document.getElementById('submit-modal').classList.add('hidden');
+        }
+
+        function acknowledgeTimeout() {
+            document.getElementById('timeout-modal').classList.add('hidden');
+            submitExam();
+        }
+
+        function toggleDiscussionSection() {
+            const sec = document.getElementById('discussion-section');
+            if (sec) sec.classList.toggle('hidden');
+        }
+
+        function evaluateQuestion(q, uAns) {
+            if (uAns === undefined || uAns === null) return false;
+
+            if (q.type === 'single') {
+                return uAns === q.correctAnswer;
+            } 
+            else if (q.type === 'multiple') {
+                if (!Array.isArray(uAns)) return false;
+                if (uAns.length !== q.correctAnswer.length) return false;
+                const sortedU = [...uAns].sort();
+                const sortedC = [...q.correctAnswer].sort();
+                return sortedU.every((val, index) => val === sortedC[index]);
+            } 
+            else if (q.type === 'true_false') {
+                if (typeof uAns !== 'object') return false;
+                return q.statements.every(stmt => uAns[stmt.id] === q.correctAnswer[stmt.id]);
+            }
+            return false;
+        }
+
+        function sendResultToGoogleScript(payload) {
+            lastExamPayload = payload;
+
+            const customUrlInput = document.getElementById('custom-script-url');
+            if (customUrlInput && customUrlInput.value.trim()) {
+                GOOGLE_SCRIPT_URL = customUrlInput.value.trim();
+            } else if (customUrlInput) {
+                customUrlInput.value = GOOGLE_SCRIPT_URL;
+            }
+
+            const statusEl = document.getElementById('submit-status');
+            if (statusEl) {
+                statusEl.classList.remove('hidden');
+                statusEl.className = "mb-4 p-3 rounded-xl text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center gap-2";
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin text-blue-600 text-sm"></i> Mengirimkan data (Nama: <strong>${payload.nama}</strong>) ke Spreadsheet...`;
+            }
+
+            const queryParams = new URLSearchParams({
+                nama: payload.nama,
+                nama_peserta: payload.nama,
+                score: payload.score,
+                skor: payload.skor,
+                nilai: payload.score,
+                benar: payload.benar,
+                salah: payload.salah,
+                waktu: payload.waktu,
+                timestamp: payload.timestamp
+            }).toString();
+
+            const targetUrl = GOOGLE_SCRIPT_URL.includes('?') 
+                ? `${GOOGLE_SCRIPT_URL}&${queryParams}` 
+                : `${GOOGLE_SCRIPT_URL}?${queryParams}`;
+
+            fetch(targetUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                if (statusEl) {
+                    statusEl.className = "mb-4 p-3 rounded-xl text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center gap-2";
+                    statusEl.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-emerald-600 text-sm"></i> Data hasil ujian (Nama: <strong>${payload.nama}</strong>) berhasil terkirim ke Spreadsheet!`;
+                }
+            })
+            .catch((err) => {
+                console.error("Gagal mengirim hasil:", err);
+                if (statusEl) {
+                    statusEl.className = "mb-4 p-3 rounded-xl text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200 flex items-center justify-center gap-2";
+                    statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 text-sm"></i> Gagal terhubung ke server. Silakan periksa koneksi internet atau masukan URL Web App Anda.`;
+                }
+            });
+        }
+
+        function resendResultData() {
+            if (lastExamPayload) {
+                sendResultToGoogleScript(lastExamPayload);
+            }
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            closeSubmitModal();
+
+            let correctCount = 0;
+
+            questionsData.forEach(q => {
+                const uAns = userAnswers[q.id];
+                if (evaluateQuestion(q, uAns)) {
+                    correctCount++;
+                }
+            });
+
+            const total = questionsData.length;
+            const wrongCount = total - correctCount;
+            const score = Math.round((correctCount / total) * 100);
+
+            const minsSpent = Math.floor(totalTimeSpent / 60);
+            const secsSpent = totalTimeSpent % 60;
+            const formattedTimeSpent = `${String(minsSpent).padStart(2, '0')}:${String(secsSpent).padStart(2, '0')}`;
+
+            document.getElementById('res-score').textContent = score;
+            document.getElementById('res-correct').textContent = `${correctCount} / ${total}`;
+            document.getElementById('res-wrong').textContent = wrongCount;
+            document.getElementById('res-time').textContent = formattedTimeSpent;
+
+            const resultData = {
+                nama: userProfile.name,
+                nama_peserta: userProfile.name,
+                score: score,
+                skor: score,
+                nilai: score,
+                nilai_akhir: score,
+                benar: correctCount,
+                salah: wrongCount,
+                totalSoal: total,
+                waktu: formattedTimeSpent,
+                timestamp: new Date().toLocaleString('id-ID')
+            };
+
+            sendResultToGoogleScript(resultData);
+            renderReviewDiscussion();
+
+            document.getElementById('exam-app').classList.add('hidden');
+            document.getElementById('header-exam-info').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+        }
+
+        function renderReviewDiscussion() {
+            const container = document.getElementById('review-container');
+            container.innerHTML = '';
+
+            questionsData.forEach((q, idx) => {
+                const uAns = userAnswers[q.id];
+                const isCorrect = evaluateQuestion(q, uAns);
+                
+                let userAnsText = "-";
+                let keyAnsText = "";
+
+                if (q.type === 'single') {
+                    userAnsText = uAns !== undefined ? `${String.fromCharCode(65 + uAns)}. ${q.options[uAns]}` : "Tidak Dijawab";
+                    keyAnsText = `${String.fromCharCode(65 + q.correctAnswer)}. ${q.options[q.correctAnswer]}`;
+                } 
+                else if (q.type === 'multiple') {
+                    userAnsText = Array.isArray(uAns) && uAns.length > 0 
+                        ? uAns.map(i => `${String.fromCharCode(65 + i)}. ${q.options[i]}`).join(', ') 
+                        : "Tidak Dijawab";
+                    keyAnsText = q.correctAnswer.map(i => `${String.fromCharCode(65 + i)}. ${q.options[i]}`).join(', ');
+                } 
+                else if (q.type === 'true_false') {
+                    let uTextArr = [];
+                    let kTextArr = [];
+
+                    q.statements.forEach(stmt => {
+                        const userVal = uAns ? uAns[stmt.id] : undefined;
+                        const corrVal = q.correctAnswer[stmt.id];
+
+                        const userValLabel = userVal === true ? 'Benar' : (userVal === false ? 'Salah' : 'Kosong');
+                        const corrValLabel = corrVal ? 'Benar' : 'Salah';
+
+                        uTextArr.push(`• ${stmt.text} [<b>${userValLabel}</b>]`);
+                        kTextArr.push(`• ${stmt.text} [<b>${corrValLabel}</b>]`);
+                    });
+
+                    userAnsText = uTextArr.join('<br>');
+                    keyAnsText = kTextArr.join('<br>');
+                }
+
+                const reviewCard = `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Soal No. ${idx + 1} (${q.typeName})</span>
+                            ${isCorrect 
+                                ? `<span class="px-3 py-1 bg-emerald-100 text-emerald-700 font-semibold text-xs rounded-full flex items-center gap-1"><i class="fa-solid fa-check"></i> Benar</span>`
+                                : `<span class="px-3 py-1 bg-rose-100 text-rose-700 font-semibold text-xs rounded-full flex items-center gap-1"><i class="fa-solid fa-xmark"></i> Salah</span>`
+                            }
+                        </div>
+
+                        <p class="text-slate-800 font-medium text-sm leading-relaxed whitespace-pre-line">${q.question}</p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+                            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                <span class="font-semibold text-slate-500 block mb-1">Jawaban Anda:</span>
+                                <span class="font-medium ${isCorrect ? 'text-emerald-700' : 'text-rose-600'}">${userAnsText}</span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-blue-50 border border-blue-100">
+                                <span class="font-semibold text-blue-600 block mb-1">Kunci Jawaban:</span>
+                                <span class="font-medium text-slate-700">${keyAnsText}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+                            <span class="font-semibold text-slate-700 block mb-1"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Pembahasan:</span>
+                            ${q.discussion}
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', reviewCard);
+            });
+        }
+
+        function restartExam() {
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            markedQuestions.clear();
+            timeRemaining = 30 * 60;
+            totalTimeSpent = 0;
+
+            closeAdminConfigPanel();
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('discussion-section').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('user-name').value = '';
+        }
+    </script>
+</body>
+</html>
