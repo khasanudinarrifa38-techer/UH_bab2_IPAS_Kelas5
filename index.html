@@ -361,7 +361,6 @@
         const questionBank = {
             // 1. Kelompok Soal Pilihan Ganda (1-20)
             pilihanGanda: [
-  [
   {
     "id": 1,
     "type": "single",
@@ -646,7 +645,6 @@
 
             // 2. Kelompok Soal Pilihan Ganda Kompleks (21-40)
             pilihanGandaKompleks: [
-  [
   {
     "id": 21,
     "type": "multiple",
@@ -931,7 +929,6 @@
 
             // 3. Kelompok Soal Benar / Salah (41-50)
             benarSalah: [
-  [
   {
     "id": 41,
     "type": "true_false",
@@ -1556,9 +1553,9 @@
                 } 
                 else if (q.type === 'multiple') {
                     userAnsText = Array.isArray(uAns) && uAns.length > 0 
-                        ? uAns.map(i => `${String.fromCharCode(65 + i)}. ${q.options[i]}`).join(', ') 
+                        ? uAns.map(i => `${String.fromCharCode(65 + i)}. ${q.options[i]}`).join('<br>') 
                         : "Tidak Dijawab";
-                    keyAnsText = q.correctAnswer.map(i => `${String.fromCharCode(65 + i)}. ${q.options[i]}`).join(', ');
+                    keyAnsText = q.correctAnswer.map(i => `${String.fromCharCode(65 + i)}. ${q.options[i]}`).join('<br>');
                 } 
                 else if (q.type === 'true_false') {
                     let uTextArr = [];
@@ -1616,7 +1613,7 @@
             currentQuestionIndex = 0;
             userAnswers = {};
             markedQuestions.clear();
-            timeRemaining = 30 * 60;
+            timeRemaining = 60 * 60;
             totalTimeSpent = 0;
 
             closeAdminConfigPanel();
